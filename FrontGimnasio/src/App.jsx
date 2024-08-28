@@ -1,22 +1,30 @@
-import './App.css'
-import Footer from './components/footer/Footer'
-import Landing from './components/landing/landing'
-import { BrowserRouter as Router } from 'react-router-dom'
+import "./App.css";
+import Landing from "./components/landing/Landing";
+import { createBrowserRouter, RouterProvider} from "react-router-dom";
+import RoutinesLanding from "./components/routinesLanding/RoutinesLanding";
 
 function App() {
+  
+  const router = createBrowserRouter([
+    {
+      // ruta por defecto, el landing.
+      path: "/",
+      element: <Landing/>,
+    },
+    {
+      // landing rutinas
+      path: "/routines",
+      element: <RoutinesLanding/>,
+    },
+  ]);
 
   return (
     <>
-      <div>
-        <Router>
-          <Landing />
-          <Footer />
-        </Router>
-        
-      </div>
-      
+    <div>
+      <RouterProvider router={router} />
+    </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
