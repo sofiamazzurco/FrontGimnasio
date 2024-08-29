@@ -2,6 +2,7 @@ import "./App.css";
 import Landing from "./components/landing/Landing";
 import { createBrowserRouter, RouterProvider} from "react-router-dom";
 import RoutinesLanding from "./components/routinesLanding/RoutinesLanding";
+import Footer from "./components/footer/Footer";
 
 function App() {
   
@@ -23,6 +24,8 @@ function App() {
     <div>
       <RouterProvider router={router} />
     </div>
+    <Footer />
+    
     </>
   );
 }

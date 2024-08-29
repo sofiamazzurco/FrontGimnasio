@@ -1,27 +1,27 @@
 .contenedor {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: black;
-  }
-  
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: black;
+}
+
 .video {
-    width: 100% ;
-    height: 200px;
-    object-fit: cover;
-    
-  }
+  width: 100% ;
+  height: 200px;
+  object-fit: cover;
   
+}
+
 .botonRutinas {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    color: #8a4646;
-  }
+  margin-top: -10px;
+  display: flex;
+  justify-content: center;
+  color: #8a4646;
+}
 
 h2{
-    color:rgb(255, 255, 255)
+  color:rgb(255, 255, 255)
 }
