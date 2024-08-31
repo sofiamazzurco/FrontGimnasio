@@ -1,31 +1,52 @@
 import "./App.css";
 import Landing from "./components/landing/Landing";
-import { createBrowserRouter, RouterProvider} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RoutinesLanding from "./components/routinesLanding/RoutinesLanding";
 import Footer from "./components/footer/Footer";
+import { useEffect, useState } from "react";
 
 function App() {
-  
+
+  // -----------------------------------------------
+  // fetcheo rutinas
+  // -----------------------------------------------
+
+  const [routines, setRoutines] = useState([]);
+
+  const fetchRoutines = async () => {
+    try {
+      const response = await fetch(
+        "https://localhost:7067/api/Routine/GetAllRoutine");
+      const data = await response.json();
+      setRoutines(data);
+    } catch (error) {
+      console.log("Error al solicitar rutinas a la base de datos:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRoutines();
+  }, []);
+
   const router = createBrowserRouter([
     {
       // ruta por defecto, el landing.
       path: "/",
-      element: <Landing/>,
+      element: <Landing />,
     },
     {
       // landing rutinas
       path: "/routines",
-      element: <RoutinesLanding/>,
+      element: <RoutinesLanding routines={routines} />,
     },
   ]);
 
   return (
     <>
-    <div>
-      <RouterProvider router={router} />
-    </div>
-    <Footer />
-    
+      <div>
+        <RouterProvider router={router} />
+      </div>
+      <Footer/>
     </>
   );
 }
