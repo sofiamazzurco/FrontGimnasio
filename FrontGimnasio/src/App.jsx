@@ -67,6 +67,28 @@ function App() {
     }
   };
   
+
+  // ------------------------------------------------------
+  // Post Rutinas
+  // ----------------------------------------------------------
+
+  const addRoutine = async (newRoutine) => {
+    try {
+      console.log("Ejecutando callback addRoutine");
+      await fetch("https://localhost:7067/api/Routine/CreateRoutine", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newRoutine),
+      });
+
+      await fetchRoutines();
+    } catch (error) {
+      console.log("Error al agregar película a la base de datos:", error);
+    }
+  };
+
   // -----------------------------------------------------------
   // modify Rutinas
   // -----------------------------------------------------
@@ -108,7 +130,7 @@ function App() {
     {
       // landing rutinas
       path: "/routines",
-      element: <RoutinesLanding exercises={exercises} routines={routines} onDeleteRoutine={deleteRoutineHandler} onModifyRoutine={modifyRoutineHandler} />,
+      element: <RoutinesLanding exercises={exercises} routines={routines} onDeleteRoutine={deleteRoutineHandler} onModifyRoutine={modifyRoutineHandler} addRoutine={addRoutine}/>,
     },
   ]);
 
