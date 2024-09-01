@@ -1,7 +1,26 @@
-import { Card, Container, Row, Button } from "react-bootstrap";
+import { Container, Row, Button, Card } from "react-bootstrap";
 import PropTypes from "prop-types";
+import ModifyModal from "../modals/modifyModal/ModifyModal";
+import DeleteModal from "../modals/deleteModal/DeleteModal";
+import CreateModal from "../modals/createModal/CreateModal";
+import { useState } from "react";
 
 const RoutinesLanding = ({ routines }) => {
+  // estados para modales
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showModifyModal, setShowModifyModal] = useState(false);
+
+  const handleOpenCreateModal = () => setShowCreateModal(true);
+  const handleOpenDeleteModal = () => setShowDeleteModal(true);
+  const handleOpenModifyModal = () => setShowModifyModal(true);
+
+  // una unica funcion para cerrar todos
+  const handleCloseModal = () => {
+    setShowCreateModal(false);
+    setShowDeleteModal(false);
+    setShowModifyModal(false);
+  };
 
   return (
     <>
@@ -18,7 +37,7 @@ const RoutinesLanding = ({ routines }) => {
         Rutinas disponibles
       </h4>
       <Container className="d-flex justify-content-center mb-4">
-        <Button variant="success" className="w-50">
+        <Button variant="success" className="w-50" onClick={handleOpenCreateModal}>
           Agregar rutina ++
         </Button>
       </Container>
@@ -31,7 +50,7 @@ const RoutinesLanding = ({ routines }) => {
                 backgroundColor: "black",
                 marginBottom: "1rem",
                 width: "18rem",
-                margin: "10px"
+                margin: "10px",
               }}
             >
               <Card.Title style={{ color: "white", padding: "10px" }}>
@@ -66,12 +85,13 @@ const RoutinesLanding = ({ routines }) => {
                 <Button
                   variant="danger"
                   className="d-flex mt-3 w-100 justify-content-center"
+                  onClick={handleOpenDeleteModal}
                 >
                   Eliminar rutina
                 </Button>
                 <Button
                   className="d-flex mt-3 w-100 justify-content-center"
-
+                  onClick={handleOpenModifyModal}
                 >
                   Modificar rutina
                 </Button>
@@ -80,16 +100,15 @@ const RoutinesLanding = ({ routines }) => {
           ))}
         </Row>
       </Container>
+      <ModifyModal show={showModifyModal} onHide={handleCloseModal} />
+      <CreateModal show={showCreateModal} onHide={handleCloseModal} />
+      <DeleteModal show={showDeleteModal} onHide={handleCloseModal} />
     </>
   );
 };
 
-// DATOS A MODO DE EJEMPLO, DEBEN RELLENARSE CON DATA DEL BACK
-
-// los datos del nombre de rutina, duracion y etc deberia llenarse de los datos del back (fetcheo)
+RoutinesLanding.propTypes = {
+  routines: PropTypes.array.isRequired,
+};
 
 export default RoutinesLanding;
-
-RoutinesLanding.propTypes = {
-  routines: PropTypes.array,
-};
