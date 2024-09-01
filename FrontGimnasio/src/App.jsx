@@ -50,6 +50,24 @@ function App() {
   }, []);
 
 
+  // ---------------------------------------------------------------
+  // delete Rutinas
+  // -------------------------------------------------------------------
+  const deleteRoutineHandler = async (routineId) => {
+    try {
+      await fetch(`https://localhost:7067/api/Routine/DeleteRoutine/${routineId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      await fetchRoutines(); 
+    } catch (error) {
+      console.log("Error al eliminar rutina de la base de datos:", error);
+    }
+  };
+  
+
 
   const router = createBrowserRouter([
     {
@@ -60,7 +78,7 @@ function App() {
     {
       // landing rutinas
       path: "/routines",
-      element: <RoutinesLanding exercises={exercises} routines={routines} />,
+      element: <RoutinesLanding exercises={exercises} routines={routines} onDeleteRoutine={deleteRoutineHandler}/>,
     },
   ]);
 

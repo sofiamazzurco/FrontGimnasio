@@ -5,15 +5,27 @@ import DeleteModal from "../modals/deleteModal/DeleteModal";
 import CreateModal from "../modals/createModal/CreateModal";
 import { useState } from "react";
 
-const RoutinesLanding = ({ routines, exercises }) => {
+const RoutinesLanding = ({ routines, exercises, onDeleteRoutine}) => {
   // estados para modales
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showModifyModal, setShowModifyModal] = useState(false);
 
+  // estado para tener seguimiento del id de la rutina seleccionada a eliminar
+  const [selectedRoutineId, setSelectedRoutineId] = useState(null);
+
   const handleOpenCreateModal = () => setShowCreateModal(true);
-  const handleOpenDeleteModal = () => setShowDeleteModal(true);
-  const handleOpenModifyModal = () => setShowModifyModal(true);
+  
+  const handleOpenDeleteModal = (routineId) => {
+    setSelectedRoutineId(routineId); // seteo el id d la rutina a eliminar
+    setShowDeleteModal(true);
+  };
+  
+
+  const handleOpenModifyModal = (routineId) => {
+    setSelectedRoutineId(routineId); //seteo el id de la rutina a modificar
+    setShowModifyModal(true);
+  };
 
   // una unica funcion para cerrar todos
   const handleCloseModal = () => {
@@ -53,7 +65,6 @@ const RoutinesLanding = ({ routines, exercises }) => {
               backgroundColor: "black",
               marginBottom: "1rem",
               margin: "10px",
-
             }}
           >
             <Card.Title style={{ color: "white", padding: "10px" }}>
@@ -90,34 +101,39 @@ const RoutinesLanding = ({ routines, exercises }) => {
               <Button
                 variant="danger"
                 className="d-flex mt-2 w-100 justify-content-center"
-                onClick={handleOpenDeleteModal}
+                onClick={() => handleOpenDeleteModal(routine.routineId)}  
               >
                 Eliminar rutina
               </Button>
               <Button
                 className="d-flex mt-2 w-100 justify-content-center"
-                onClick={handleOpenModifyModal}
-              >
+                onClick={() => handleOpenModifyModal(routine.routineId)} >
                 Modificar rutina
               </Button>
             </Card.Body>
           </Card>
         ))}
       </Container>
-      <ModifyModal show={showModifyModal} onHide={handleCloseModal} />
+      <ModifyModal show={showModifyModal} onHide={handleCloseModal} routineId={selectedRoutineId} />
       <CreateModal
         show={showCreateModal}
         onHide={handleCloseModal}
         exercises={exercises}
       />
-      <DeleteModal show={showDeleteModal} onHide={handleCloseModal} />
+      <DeleteModal
+        show={showDeleteModal}
+        onHide={handleCloseModal}
+        onDelete={onDeleteRoutine} 
+        routineId={selectedRoutineId}
+      />
     </>
   );
 };
 
 RoutinesLanding.propTypes = {
   routines: PropTypes.array.isRequired,
-  exercises: PropTypes.array.isRequired
+  exercises: PropTypes.array.isRequired,
+  onDeleteRoutine: PropTypes.func.isRequired
 };
 
 export default RoutinesLanding;

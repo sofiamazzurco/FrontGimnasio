@@ -2,7 +2,18 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-const DeleteModal = ({ show, onHide }) => {
+const DeleteModal = ({ show, onHide, onDelete, routineId }) => {
+  console.log("ID recibido en el modal:", routineId); 
+
+  const handleDelete = () => {
+    if (routineId) { // si existe un Id, llama a la funcion
+      onDelete(routineId);
+    } else {
+      console.log("ID de rutina no definido");
+    }
+    onHide();
+  };
+
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
@@ -15,7 +26,7 @@ const DeleteModal = ({ show, onHide }) => {
         <Button variant="dark" onClick={onHide}>
           Cancelar
         </Button>
-        <Button variant="danger" onClick={onHide}>
+        <Button variant="danger" onClick={handleDelete}>
           Eliminar
         </Button>
       </Modal.Footer>
@@ -23,10 +34,12 @@ const DeleteModal = ({ show, onHide }) => {
   );
 };
 
+
 DeleteModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  routineId: PropTypes.number.isRequired,
 };
 
 export default DeleteModal;
-
