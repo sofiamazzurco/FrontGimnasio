@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { Dropdown, DropdownButton, Form } from "react-bootstrap";
 
+
 const ModifyModal = ({ show, onHide, onModify, routine }) => {
   const [name, setName] = useState("");
   const [duration, setDuration] = useState("");
@@ -17,18 +18,40 @@ const ModifyModal = ({ show, onHide, onModify, routine }) => {
     }
   }, [routine]);
 
-  const handleModify = () => {
+  const handleModify = async () => { 
     if (routine) {
       const updatedRoutine = {
-        routineId: routine.routineId,
         name,
-        duration,
+        duration: parseInt(duration, 10), 
         difficulty,
-        exercisesId: routine.exercisesId,
+        exercisesId: routine.exercisesId, 
       };
-      onModify(updatedRoutine);
+
+      console.log("Updated routine object:", updatedRoutine);
+
+      try {
+        const response = await fetch(`https://localhost:7067/api/Routine/UpdateRoutine/${routine.routineId}`, {
+          method: "PUT", 
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedRoutine),
+        });
+
+        console.log("Response status:", response.status);
+        console.log("Response body:", await response.text());
+
+        if (!response.ok) {
+          throw new Error("Error al modificar la rutina");
+        }
+
+        onModify(updatedRoutine);
+
+        onHide();
+      } catch (error) {
+        console.error("Error al modificar la rutina:", error);
+      }
     }
-    onHide();
   };
 
   const handleSelectDifficulty = (selectedDifficulty) => {
@@ -62,26 +85,7 @@ const ModifyModal = ({ show, onHide, onModify, routine }) => {
               style={{ color: "black" }}
             />
           </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label style={{ color: "black" }}>Dificultad</Form.Label>
-            <DropdownButton
-              id="dropdown-basic-button"
-              title={
-                difficulty === "0"
-                  ? "Baja"
-                  : difficulty === "1"
-                  ? "Media"
-                  : difficulty === "2"
-                  ? "Alta"
-                  : "Modificar dificultad"
-              }
-              onSelect={handleSelectDifficulty}
-            >
-              <Dropdown.Item eventKey="0">Baja</Dropdown.Item>
-              <Dropdown.Item eventKey="1">Media</Dropdown.Item>
-              <Dropdown.Item eventKey="2">Alta</Dropdown.Item>
-            </DropdownButton>
-          </Form.Group>
+     
         </Form>
       </Modal.Body>
       <Modal.Footer>
@@ -104,7 +108,6 @@ ModifyModal.propTypes = {
     routineId: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     duration: PropTypes.number.isRequired,
-    difficulty: PropTypes.string.isRequired,
     exercisesId: PropTypes.arrayOf(PropTypes.number).isRequired,
   }),
 };
