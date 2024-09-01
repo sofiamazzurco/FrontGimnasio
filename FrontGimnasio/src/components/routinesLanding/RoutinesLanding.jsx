@@ -5,7 +5,7 @@ import DeleteModal from "../modals/deleteModal/DeleteModal";
 import CreateModal from "../modals/createModal/CreateModal";
 import { useState } from "react";
 
-const RoutinesLanding = ({ routines }) => {
+const RoutinesLanding = ({ routines, exercises }) => {
   // estados para modales
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -101,7 +101,7 @@ const RoutinesLanding = ({ routines }) => {
         </Row>
       </Container>
       <ModifyModal show={showModifyModal} onHide={handleCloseModal} />
-      <CreateModal show={showCreateModal} onHide={handleCloseModal} />
+      <CreateModal show={showCreateModal} onHide={handleCloseModal} exercises={exercises} />
       <DeleteModal show={showDeleteModal} onHide={handleCloseModal} />
     </>
   );

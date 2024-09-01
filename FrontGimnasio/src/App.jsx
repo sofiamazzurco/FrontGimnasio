@@ -28,6 +28,29 @@ function App() {
     fetchRoutines();
   }, []);
 
+  // ------------------------------------------------------
+  // fetcheo ejercicios
+  // ----------------------------------------------------------
+
+  const [exercises, setExercises] = useState([]);
+
+  const fetchExercises = async () => {
+    try {
+      const response = await fetch(
+        "https://localhost:7067/api/Exercise/Get");
+      const data = await response.json();
+      setExercises(data);
+    } catch (error) {
+      console.log("Error al solicitar ejercicios a la base de datos:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchExercises();
+  }, []);
+
+
+
   const router = createBrowserRouter([
     {
       // ruta por defecto, el landing.
@@ -37,7 +60,7 @@ function App() {
     {
       // landing rutinas
       path: "/routines",
-      element: <RoutinesLanding routines={routines} />,
+      element: <RoutinesLanding exercises={exercises} routines={routines} />,
     },
   ]);
 

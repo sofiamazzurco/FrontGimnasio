@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import PropTypes from 'prop-types';
 
-const CreateModal = ({ show, onHide }) => {
+const CreateModal = ({ show, onHide, exercises }) => {
   return (
     <>
       <Modal show={show} onHide={onHide}>
