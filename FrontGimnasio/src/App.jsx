@@ -67,6 +67,36 @@ function App() {
     }
   };
   
+  // -----------------------------------------------------------
+  // modify Rutinas
+  // -----------------------------------------------------
+   const modifyRoutineHandler = async (updatedRoutine) => {
+    try {
+      const response = await fetch(
+        `https://localhost:7067/api/Routine/UpdateRoutine/${routineId}`
+      );
+      const currentRoutine = await response.json();
+
+      // combino los datos nuevos con los datos existentes
+      const updatedRoutine = {
+        ...currentRoutine,
+        ...updatedRoutine,
+      };
+
+      // actualizo la rutina en la base sin que se eliminen sus propiedades que no son modificadas
+      await fetch(`https://localhost:7067/api/Routine/UpdateRoutine/${routineId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedRoutine),
+      });
+
+      await fetchRoutines();
+    } catch (error) {
+      console.log("Error al modificar rutina en la base de datos:", error);
+    }
+  };
 
 
   const router = createBrowserRouter([
@@ -78,7 +108,7 @@ function App() {
     {
       // landing rutinas
       path: "/routines",
-      element: <RoutinesLanding exercises={exercises} routines={routines} onDeleteRoutine={deleteRoutineHandler}/>,
+      element: <RoutinesLanding exercises={exercises} routines={routines} onDeleteRoutine={deleteRoutineHandler} onModifyRoutine={modifyRoutineHandler} />,
     },
   ]);
 

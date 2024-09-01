@@ -5,25 +5,27 @@ import DeleteModal from "../modals/deleteModal/DeleteModal";
 import CreateModal from "../modals/createModal/CreateModal";
 import { useState } from "react";
 
-const RoutinesLanding = ({ routines, exercises, onDeleteRoutine}) => {
+const RoutinesLanding = ({ routines, exercises, onDeleteRoutine, onModifyRoutine }) => {
+
   // estados para modales
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showModifyModal, setShowModifyModal] = useState(false);
 
-  // estado para tener seguimiento del id de la rutina seleccionada a eliminar
-  const [selectedRoutineId, setSelectedRoutineId] = useState(null);
+  // estado para tener seguimiento del id de la rutina seleccionada a eliminar/modificar
+  const [selectedRoutine, setSelectedRoutine] = useState(null);
 
   const handleOpenCreateModal = () => setShowCreateModal(true);
   
   const handleOpenDeleteModal = (routineId) => {
-    setSelectedRoutineId(routineId); // seteo el id d la rutina a eliminar
+    const routine = routines.find((r) => r.routineId === routineId);
+    setSelectedRoutine(routine); // seteo la rutina a eliminar
     setShowDeleteModal(true);
   };
   
-
   const handleOpenModifyModal = (routineId) => {
-    setSelectedRoutineId(routineId); //seteo el id de la rutina a modificar
+    const routine = routines.find((r) => r.routineId === routineId);
+    setSelectedRoutine(routine); // seteo la rutina a modificar
     setShowModifyModal(true);
   };
 
@@ -32,20 +34,15 @@ const RoutinesLanding = ({ routines, exercises, onDeleteRoutine}) => {
     setShowCreateModal(false);
     setShowDeleteModal(false);
     setShowModifyModal(false);
+    setSelectedRoutine(null);
   };
 
   return (
     <>
-      <h1
-        style={{ color: "white" }}
-        className="d-flex justify-content-center p-5"
-      >
+      <h1 style={{ color: "white" }} className="d-flex justify-content-center p-5">
         Bienvenidos al Gym! 💪
       </h1>
-      <h4
-        className="mb-4 d-flex justify-content-center"
-        style={{ color: "white" }}
-      >
+      <h4 className="mb-4 d-flex justify-content-center" style={{ color: "white" }}>
         Rutinas disponibles
       </h4>
       <Container className="d-flex justify-content-center mb-4">
@@ -60,11 +57,11 @@ const RoutinesLanding = ({ routines, exercises, onDeleteRoutine}) => {
       <Container className="d-flex flex-wrap justify-content-center">
         {routines.map((routine) => (
           <Card
-            key={routine.id}
+            key={routine.routineId} 
             style={{
               backgroundColor: "black",
               marginBottom: "1rem",
-              margin: "10px",
+              margin: "10px"
             }}
           >
             <Card.Title style={{ color: "white", padding: "10px" }}>
@@ -79,10 +76,10 @@ const RoutinesLanding = ({ routines, exercises, onDeleteRoutine}) => {
             />
             <Card.Body>
               <Card.Text style={{ color: "white", textAlign: "left" }}>
-                Duración: {routine.duration} min
+                <b>Duración:</b> {routine.duration} min ⏲️
               </Card.Text>
               <Card.Text style={{ color: "white", textAlign: "left" }}>
-                Dificultad:
+                <b>Dificultad:</b>
                 {routine.difficulty === 1
                   ? " Media "
                   : routine.difficulty === 2
@@ -90,11 +87,11 @@ const RoutinesLanding = ({ routines, exercises, onDeleteRoutine}) => {
                   : " Baja "}
               </Card.Text>
               <Card.Text style={{ color: "white", textAlign: "left" }}>
-                Ejercicios:
+                <b>Ejercicios:</b>
                 {routine.exercisesId.map((exerciseId) => {
                   const exercise = exercises.find((e) => e.id === exerciseId);
                   return exercise ? (
-                    <div key={exercise.id}> * {exercise.name}</div>
+                    <div key={exercise.id}> ➝ {exercise.name}</div>
                   ) : null;
                 })}
               </Card.Text>
@@ -114,7 +111,12 @@ const RoutinesLanding = ({ routines, exercises, onDeleteRoutine}) => {
           </Card>
         ))}
       </Container>
-      <ModifyModal show={showModifyModal} onHide={handleCloseModal} routineId={selectedRoutineId} />
+      <ModifyModal
+        show={showModifyModal}
+        onHide={handleCloseModal}
+        onModify={onModifyRoutine}
+        routine={selectedRoutine}
+      />
       <CreateModal
         show={showCreateModal}
         onHide={handleCloseModal}
@@ -123,8 +125,8 @@ const RoutinesLanding = ({ routines, exercises, onDeleteRoutine}) => {
       <DeleteModal
         show={showDeleteModal}
         onHide={handleCloseModal}
-        onDelete={onDeleteRoutine} 
-        routineId={selectedRoutineId}
+        onDelete={onDeleteRoutine}
+        routineId={selectedRoutine?.routineId} 
       />
     </>
   );
@@ -133,7 +135,9 @@ const RoutinesLanding = ({ routines, exercises, onDeleteRoutine}) => {
 RoutinesLanding.propTypes = {
   routines: PropTypes.array.isRequired,
   exercises: PropTypes.array.isRequired,
-  onDeleteRoutine: PropTypes.func.isRequired
+  onDeleteRoutine: PropTypes.func.isRequired,
+  onModifyRoutine: PropTypes.func.isRequired
 };
 
 export default RoutinesLanding;
+

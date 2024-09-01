@@ -3,7 +3,6 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 const DeleteModal = ({ show, onHide, onDelete, routineId }) => {
-  console.log("ID recibido en el modal:", routineId); 
 
   const handleDelete = () => {
     if (routineId) { // si existe un Id, llama a la funcion
