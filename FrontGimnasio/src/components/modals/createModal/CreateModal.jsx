@@ -43,9 +43,20 @@ const CreateModal = ({ show, onHide, fetchRoutines }) => {
       return;
     }
 
-    setExercisesId([...exercisesId, parseInt(selectedExerciseId)]);
-    
+    const machinesCount = exercisesId.filter(id => {
+      const exercise = exercises.find(e => e.id === id);
+      return exercise && exercise.machineId !== null;
+    }).length;
 
+    if ( machinesCount >= 5)
+    {
+      alert('No se puene hacer mas de 5 ejercicios con maquinas por rutina')
+      return;
+    }
+
+
+    setExercisesId([...exercisesId, parseInt(selectedExerciseId)]);
+  
   };
 
   const createRoutineHandler = async (routineData) => {
