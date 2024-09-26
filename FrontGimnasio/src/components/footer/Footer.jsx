@@ -21,7 +21,7 @@ function Footer() {
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link href="https://wa.me/3412144421">
+          <Nav.Link href="https://wa.me/123456">
             <FaWhatsapp /> WhatsApp
           </Nav.Link>
         </Nav.Item>
